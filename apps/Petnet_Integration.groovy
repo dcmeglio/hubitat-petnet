@@ -11,7 +11,7 @@ definition(
     name: "Petnet Integration",
     namespace: "dcm.petnet",
     author: "Dominick Meglio",
-    description: "Connects to BOND Home hub",
+    description: "Connects to Petnet SmartFeeders",
     category: "My Apps",
     iconUrl: "https://s3.amazonaws.com/smartapp-icons/Convenience/Cat-Convenience.png",
     iconX2Url: "https://s3.amazonaws.com/smartapp-icons/Convenience/Cat-Convenience@2x.png",
