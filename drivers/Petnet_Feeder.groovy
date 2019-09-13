@@ -10,7 +10,7 @@ metadata {
 		capability "PushableButton"
         capability "Initialize" 
 		
-		attribute "hopperLevel", "string"
+		attribute "hopperLevel", "number"
     }
 }
 
