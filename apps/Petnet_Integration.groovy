@@ -24,6 +24,9 @@ preferences {
 
 def prefAccount() {
 	return dynamicPage(name: "prefAccount", title: "Connect to Petnet", nextPage:"prefListDevices", uninstall:true, install: true) {
+	section("App Name"){
+			label title: "Enter a name for this app (optional)", required: false
+		}
 		section("Account Information"){
 			input("pnUsername", "text", title: "Petnet Username", description: "Petnet Username")
 			input("pnPassword", "password", title: "Petnet Password", description: "Petnet Password")
