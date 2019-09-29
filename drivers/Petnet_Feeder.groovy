@@ -35,19 +35,19 @@ def push() {
 }
 
 def parse(description) {
-     def json = parseJson(description)
-    
-    if (json.path == "/server/hopper/last_filled")
+    def json = parseJson(description)
+
+	if (json.path == "/server/hopper/last_filled")
     {
         sendEvent(name: "hopperLevel", value: json.data.cups_remaining)
     }
     else if (json.path == "/server")
     {
-        sendEvent(name: "hopperLevel", value: json.data["hopper/cups_remaining"])
+        sendEvent(name: "hopperLevel", value: json.data.food_container["cups_remaining"])
     }
     else if (json.path == "/device/realtime/feeding")
     {
-        if (data.progress == 1)
+        if (json.progress == 1)
             queryHopper()
     }
 }
