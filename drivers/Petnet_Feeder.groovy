@@ -25,7 +25,7 @@ def installed() {
 
 def initialize()
 {
-    log.debug getDataValue("status_url")+".json?auth="+parent.getFirebaseToken()
+    logDebug getDataValue("status_url")+".json?auth="+parent.getFirebaseToken()
     eventStreamConnect(getDataValue("status_url")+".json?auth="+parent.getFirebaseToken(), "Bearer " + parent.getFirebaseToken())
 }
 
@@ -37,13 +37,9 @@ def push() {
 def parse(description) {
     def json = parseJson(description)
 
-	if (json.path == "/server/hopper/last_filled")
+	if (json.path == "/server/hopper/last_filled" || json.path == "/server")
     {
-        sendEvent(name: "hopperLevel", value: json.data.cups_remaining)
-    }
-    else if (json.path == "/server")
-    {
-        sendEvent(name: "hopperLevel", value: json.data.food_container["cups_remaining"])
+		queryHopper()
     }
     else if (json.path == "/device/realtime/feeding")
     {
@@ -126,6 +122,10 @@ def eventStreamStatus(String msg) {
 	} 
     else if (msg.contains("ERROR:")) 
     {
+		if (msg.contains("Exception during EventStream Request: java.net.ProtocolException: Too many follow-up requests:")) {
+			logDebug "possibly logged out, attempting to renew token"
+            parent.authorize()
+        }
         stopEventStream()
         runIn(10, reconnect)
     }
