@@ -46,6 +46,11 @@ def parse(description) {
         if (json.progress == 1)
             queryHopper()
     }
+    else if (json.path == "/")
+    {
+        if (json.data.keySet()[0].startsWith("device/feedings/"))
+            runIn(180, queryHopper)
+    }
 }
 
 def queryHopper()
@@ -66,6 +71,7 @@ def queryHopper()
     {
         httpGet(params) { resp -> 
             result = true
+			parent.setHopperLevel(device, resp.data.cups_remaining)
             sendEvent(name: "hopperLevel", value: resp.data.cups_remaining)
         }
     }

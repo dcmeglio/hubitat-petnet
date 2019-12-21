@@ -20,19 +20,45 @@ definition(
 
 preferences {
 	page(name: "prefAccount", title: "Petnet")
+	page(name: "prefMessages", title: "", install: false, uninstall: false, nextPage: "prefAccount")
 }
 
 def prefAccount() {
 	return dynamicPage(name: "prefAccount", title: "Connect to Petnet", nextPage:"prefListDevices", uninstall:true, install: true) {
-	section("App Name"){
+		section("App Name"){
 			label title: "Enter a name for this app (optional)", required: false
 		}
 		section("Account Information"){
 			input("pnUsername", "text", title: "Petnet Username", description: "Petnet Username")
 			input("pnPassword", "password", title: "Petnet Password", description: "Petnet Password")
+		}
+		section("Settings") {
+			input("enableNotifications", "bool", title: "Enable notifications?",defaultValue: false, displayDuringSetup: true, submitOnChange: true)
+			if (enableNotifications)
+			{
+				input("notificationDevices", "capability.notification", title: "Device(s) to notify?", required: true, multiple: true)
+				input("feedingNotification", "bool", title: "Notify when the feeder runs?", defaultValue: false, displayDuringSetup: true)
+				input("lowHopperNotification", "bool", title: "Notify when the hopper is low?", defaultValue: false, displayDuringSetup: true, submitOnChange: true)
+				if (lowHopperNotification)
+				{
+					input("hopperLevelAmount", "decimal", title: "Notify when the hopper level drops below this amount (in cups)")
+				}
+				href "prefMessages", title: "Change default notification messages", description: ""
+			}
             input("debugOutput", "bool", title: "Enable debug logging?", defaultValue: true, displayDuringSetup: false, required: false)
 		}
 	}
+}
+
+def prefMessages() {
+    dynamicPage(name: "prefMessages", title: "", nextPage: "prefAccount", install: false, uninstall: false) {
+        section("Notification Messages:") {
+            paragraph "<b><u>Instructions to use variables:</u></b>"
+            paragraph "%device% = Pet feeder device's name<br><hr>"
+            input "messageFeedingOccurred", "text", title: "Feeding Occurred:", required: false, defaultValue:"%device% has completed a feeding", submitOnChange: true 
+            input "messageHopperLow", "text", title: "Hopper Low:", required: false, defaultValue:"%device% is low on food", submitOnChange: true 
+        }
+    }
 }
 
 @Field appToken = "3Ei86ExIh6USKcuMJMrPgg=="
@@ -163,4 +189,21 @@ def logDebug(msg) {
     if (settings?.debugOutput) {
 		log.debug msg
 	}
+}
+
+def setHopperLevel(device, level) {
+	if (enableNotifications) {
+		if (feedingNotification) {
+			if (level < state.previousHopperLevel)
+			{
+				notificationDevices.deviceNotification(messageFeedingOccurred.replace("%device%",device.getName()))
+			}
+		}
+		if (lowHopperNotification) {
+			if (state.previousHopperLevel >= hopperLevelAmount && level < hopperLevelAmount) {
+				notificationDevices.deviceNotification(messageHopperLow.replace("%device%",device.getName()))
+			}
+		}
+	}
+	state.previousHopperLevel = level
 }
