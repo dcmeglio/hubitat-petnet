@@ -1,7 +1,7 @@
 /**
  *  Petnet Feeder
  *
- *  Copyright 2019 Dominick Meglio
+ *  Copyright 2019-2020 Dominick Meglio
  *
  */
 metadata {
@@ -26,7 +26,12 @@ def installed() {
 def initialize()
 {
     logDebug getDataValue("status_url")+".json?auth="+parent.getFirebaseToken()
-    eventStreamConnect(getDataValue("status_url")+".json?auth="+parent.getFirebaseToken(), "Bearer " + parent.getFirebaseToken())
+    interfaces.eventStream.connect(getDataValue("status_url")+".json?auth="+parent.getFirebaseToken(), [
+		headers: [
+			Authorization: "Bearer " + parent.getFirebaseToken()
+		],
+		pingInterval: 30
+	])
 }
 
 def push() {
@@ -143,7 +148,7 @@ def reconnect() {
 
 def stopEventStream() {
     state.streamRunning = false
-    eventStreamClose()
+    interfaces.eventStream.close()
 }
 
 def logDebug(msg) {
