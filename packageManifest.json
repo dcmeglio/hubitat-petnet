@@ -12,7 +12,7 @@
 			"location": "https://raw.githubusercontent.com/dcmeglio/hubitat-petnet/master/apps/Petnet_Integration.groovy",
 			"required": true
 		}
-	]
+	],
 	"drivers": [
 		{
 			"id" : "a31e83e2-96d5-4869-936d-3e158fd74f5f",
