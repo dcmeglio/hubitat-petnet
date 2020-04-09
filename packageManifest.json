@@ -1,0 +1,25 @@
+{
+	"packageName": "Petnet SmartFeeder Integration",
+	"minimumHEVersion": "2.1.9",
+	"author": "Dominick Meglio",
+	"version": "1.0",
+	"dateReleased": "2020-04-08",
+	"apps" : [
+		{
+			"id" : "debf61ca-cc81-4549-ad56-07ad45fb743d",
+			"name": "Petnet Integration",
+			"namespace": "dcm.petnet",
+			"location": "https://raw.githubusercontent.com/dcmeglio/hubitat-petnet/master/apps/Petnet_Integration.groovy",
+			"required": true
+		}
+	]
+	"drivers": [
+		{
+			"id" : "a31e83e2-96d5-4869-936d-3e158fd74f5f",
+			"name": "Petnet Feeder",
+			"namespace": "petnet",
+			"location": "https://raw.githubusercontent.com/dcmeglio/hubitat-petnet/master/drivers/Petnet_Feeder.groovy",
+			"required": true
+		}
+	]
+}
