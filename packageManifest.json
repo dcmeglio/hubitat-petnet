@@ -2,8 +2,9 @@
 	"packageName": "Petnet SmartFeeder Integration",
 	"minimumHEVersion": "2.1.9",
 	"author": "Dominick Meglio",
-	"version": "1.0",
-	"dateReleased": "2020-04-08",
+	"version": "1.0.1",
+	"dateReleased": "2020-04-22",
+	"documentationLink": "https://github.com/dcmeglio/hubitat-petnet/blob/master/README.md",
 	"apps" : [
 		{
 			"id" : "debf61ca-cc81-4549-ad56-07ad45fb743d",
